@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 import { styled } from "styled-components";
+import { DestructiveActionButton } from "../components/destructive-action-button";
 
 const AddButton = styled.button`
   background-color: green;
@@ -81,9 +82,13 @@ const TodoForm = ({
   );
 };
 
-const DeleteButton = ({ children, onDelete }) => {
-  return <button onClick={onDelete}>{children}</button>;
-};
+const DeleteButton = styled(DestructiveActionButton)`
+  background-color: red;
+`;
+
+// ({ children, onDelete }) => {
+//   return <button onClick={onDelete}>{children}</button>;
+// };
 
 const Todo = ({ name, description, setTodos, id }) => {
   const [editing, setEditing] = useState(false);
