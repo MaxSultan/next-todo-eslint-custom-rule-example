@@ -1,9 +1,11 @@
 import { forwardRef, useRef } from "react";
+import styled from "styled-components";
 
-const ConfirmationModal = forwardRef(({ onConfirm, onCancel }, ref) => {
+const ConfirmationModal = forwardRef(({ onConfirm }, ref) => {
   const handleCancel = () => {
     ref.current.close();
   };
+
   return (
     <dialog ref={ref}>
       Are you sure you want to delete?
@@ -13,17 +15,28 @@ const ConfirmationModal = forwardRef(({ onConfirm, onCancel }, ref) => {
   );
 });
 
-export const DestructiveActionButton = ({ children, onDelete }) => {
-  const confirmationModalRef = useRef();
+ConfirmationModal.displayName = "ConfirmationModal";
 
-  const handleClick = () => {
-    confirmationModalRef.current.showModal();
-  };
+export const DestructiveActionButton = styled(
+  ({ children, onDelete, className }) => {
+    const confirmationModalRef = useRef();
 
-  return (
-    <>
-      <button onClick={handleClick}>{children}</button>
-      <ConfirmationModal ref={confirmationModalRef} onConfirm={onDelete} />
-    </>
-  );
-};
+    const handleClick = () => {
+      confirmationModalRef.current.showModal();
+    };
+
+    return (
+      <div className={className}>
+        <button onClick={handleClick}>{children}</button>
+        <ConfirmationModal ref={confirmationModalRef} onConfirm={onDelete} />
+      </div>
+    );
+  }
+)`
+  & > ${ConfirmationModal} {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+  }
+`;

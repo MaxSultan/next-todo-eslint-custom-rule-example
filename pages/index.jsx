@@ -18,6 +18,13 @@ const CancelButton = ({ onCancel, children }) => {
   );
 };
 
+const ButtonContainer = styled.div`
+  display: grid;
+  & > ${CancelButton} {
+    align-self: end;
+  }
+`;
+
 const TodoForm = ({
   setTodos,
   onCancel,
@@ -73,10 +80,12 @@ const TodoForm = ({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <button type="submit">
-          {existingName || existingDescription ? "Update" : "Create"}
-        </button>
-        <CancelButton onCancel={() => onCancel()}>Cancel</CancelButton>
+        <ButtonContainer>
+          <button type="submit">
+            {existingName || existingDescription ? "Update" : "Create"}
+          </button>
+          <CancelButton onCancel={() => onCancel()}>Cancel</CancelButton>
+        </ButtonContainer>
       </form>
     </li>
   );
@@ -85,10 +94,6 @@ const TodoForm = ({
 const DeleteButton = styled(DestructiveActionButton)`
   background-color: red;
 `;
-
-// ({ children, onDelete }) => {
-//   return <button onClick={onDelete}>{children}</button>;
-// };
 
 const Todo = ({ name, description, setTodos, id }) => {
   const [editing, setEditing] = useState(false);
