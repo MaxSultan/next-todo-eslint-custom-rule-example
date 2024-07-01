@@ -125,12 +125,6 @@ processStdInLineByLine().then((fileErrors) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <style>
-            svg {
-                filter: opacity(0.3);
-                position: fixed;
-                top: 50%;
-                transform: translateY(-50%);
-            }
             table {
                 border-collapse: separate;
                 border-spacing: 16px;
