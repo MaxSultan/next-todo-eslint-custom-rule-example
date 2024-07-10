@@ -4,59 +4,16 @@ Show the start:
 - pages/index.jsx lines 13-26
 - components/descructive-action-button.jsx line 4,36
 - CODEOWNERS
+- eslint.config.js (rules turned off)
 
 What is styled components?
 How does it work in 30 seconds
  
 Explain the styling non styled components rule
 
-1) run `npm init @eslint/config@latest`
-2) answer questions in the CLI
-3) Show the Config and explain options
+1) Run the linter - `npm run lint`
 
-```js
-// eslint.config.js
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
-import { fixupConfigRules } from "@eslint/compat";
-import local from "./rules/index.js";
-
-export default [
-  { files: ["**/*.{js,mjs,cjs,jsx}"] },
-  { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } } },
-  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  pluginJs.configs.recommended,
-  ...fixupConfigRules(pluginReactConfig),
-];
-```
-4) Add ignores to config
-
-```js
-// eslint.config.js
-  {
-    ignores: [".next/", "node_modules/"],
-  },
-```
-
-5) Run the linter
-
-```bash
-npx eslint **/*.{js,jsx}
-```
-6) Turn off the react rule errors
-
-```js
-// eslint.config.js
-{
-    rules: {
-      "react/prop-types": "off",
-      "react/react-in-jsx-scope": "off",
-    },
-  },
-```
-
-7) TDD - Write tests
+2) TDD - Write tests
 ```js
 // rules/styling-non-styled-components-within.test.js
 import { RuleTester } from "eslint";
@@ -139,10 +96,10 @@ ruleTester.run(
 );
 
 console.log("All tests passed!");
-
 ```
-8) Move to AST Explorer - https://astexplorer.net/
-9)  Add test cases to AST explorer
+
+3) Move to AST Explorer - https://astexplorer.net/
+4) Add test cases to AST explorer
 
 ```js
 
@@ -171,7 +128,7 @@ const TodoForm = () => {
 //bad
 const StyledButton = ({children, onClick}) => {
     return (
-        <button onClick={onClick}>{children}</button>
+      <button onClick={onClick}>{children}</button>
     )
 };
 
@@ -193,7 +150,7 @@ const TodoForm = () => {
 };
 ```
 
-10) Write the rule (https://eslint.org/docs/latest/extend/custom-rule-tutorial)
+5) Write the rule (https://eslint.org/docs/latest/extend/custom-rule-tutorial)
 
 ```js
 // rules/styling-non-styled-components-within.js
@@ -243,8 +200,8 @@ export default {
 };
 ```
 
-11) Move it back to the local plugin
-12) Run the Tests Locally (configure the RuleTester) - `node styling-non-styled-components-within.test.js`
+6) Move it back to the local plugin
+7) Run the Tests Locally (configure the RuleTester) - `node styling-non-styled-components-within.test.js`
 
 ```js
 // rules/styling-non-styled-components-within.test.js
@@ -258,22 +215,19 @@ const ruleTester = new RuleTester({
 });
 ```
 
-13) Configure the local plugin
+8) Configure the local plugin
 
 ```js
 // rules/index.js
 import rule from "./styling-non-styled-components-within.js";
 
 export default {
-  meta: {}, // information about the plugin 
-  configs: {}, // an object containing named configurations
   rules: {
     "styling-non-styled-components-within": rule,
   }, // an object containing the definitions of custom rules
-  processors: {}, // an object containing named processors
 };
 ```
-14) Update the config
+9) Update the config
     
 ```js
 // eslint.config.js
@@ -304,9 +258,9 @@ export default [
   },
 ];
 ```
-15) Run eslint to show the warning `npx eslint **/*.{js,jsx}`
-16) Show the CODEOWNERS File
-17) Write the report generator
+10) Run eslint to show the warning `npx eslint **/*.{js,jsx}`
+11) Show the CODEOWNERS File
+12) Write the report generator
 ```js
 // bin/report-generator.cjs
 
