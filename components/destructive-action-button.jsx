@@ -34,10 +34,7 @@ export const DestructiveActionButton = styled(
   }
 )`
   & > ${ConfirmationModal} {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 50%);
+    background-color: lightgreen;
   }
 
   & > button {
