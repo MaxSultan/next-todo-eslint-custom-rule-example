@@ -18,10 +18,14 @@ const CancelButton = ({ onCancel, children }) => {
   );
 };
 
-const ButtonContainer = styled.div`
+const FormCard = styled.form`
   display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: baseline;
+  border-bottom: 3px solid grey;
+
   & > ${CancelButton} {
-    align-self: end;
+    border: 5px solid red;
   }
 `;
 
@@ -65,34 +69,46 @@ const TodoForm = ({
 
   return (
     <li>
-      <form action="" onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
-        <input
-          id="name"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <label htmlFor="description">Description:</label>
-        <input
-          id="description"
-          name="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <ButtonContainer>
-          <button type="submit">
-            {existingName || existingDescription ? "Update" : "Create"}
-          </button>
-          <CancelButton onCancel={() => onCancel()}>Cancel</CancelButton>
-        </ButtonContainer>
-      </form>
+      <FormCard action="" onSubmit={handleSubmit}>
+        <fieldset>
+          <label htmlFor="name">Name:</label>
+          <input
+            id="name"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </fieldset>
+        <fieldset>
+          <label htmlFor="description">Description:</label>
+          <input
+            id="description"
+            name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </fieldset>
+        <button type="submit">
+          {existingName || existingDescription ? "Update" : "Create"}
+        </button>
+        <CancelButton onCancel={() => onCancel()}>Cancel</CancelButton>
+      </FormCard>
     </li>
   );
 };
 
 const DeleteButton = styled(DestructiveActionButton)`
-  background-color: red;
+  & > button {
+    background-color: red;
+    color: white;
+  }
+`;
+
+const TodoCard = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: baseline;
+  border-bottom: 3px solid grey;
 `;
 
 const Todo = ({ name, description, setTodos, id }) => {
@@ -114,13 +130,13 @@ const Todo = ({ name, description, setTodos, id }) => {
       id={id}
     />
   ) : (
-    <li>
-      <section>
+    <li key={id}>
+      <TodoCard>
         <h2>{name}</h2>
         <p>{description}</p>
         <DeleteButton onDelete={handleDelete}>Delete</DeleteButton>
         <button onClick={enableEditMode}>Edit</button>
-      </section>
+      </TodoCard>
     </li>
   );
 };
@@ -134,8 +150,6 @@ const Home = () => {
   const appendTodoForm = () => {
     setShowTodoForm(true);
   };
-
-  console.log(todos);
 
   return (
     <main>

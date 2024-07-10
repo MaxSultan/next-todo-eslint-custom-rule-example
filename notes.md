@@ -1,11 +1,11 @@
-ESLINT install
-
-https://eslint.org/docs/latest/use/getting-started
+ESLINT install - https://eslint.org/docs/latest/use/getting-started
 
 Show the start:
-- pages/index.jsx
-- components/descructive-action-button.jsx
+- pages/index.jsx lines 13-26
+- components/descructive-action-button.jsx line 4,36
 - CODEOWNERS
+ 
+Explain the styling non styled components rule
 
 1) run `npm init @eslint/config@latest`
 2) answer questions in the CLI
@@ -52,12 +52,8 @@ npx eslint **/*.{js,jsx}
     },
   },
 ```
-   
-7) Explain the styling non styled components rule
-   
-  
 
-8) TDD - Write tests
+7) TDD - Write tests
 ```js
 // rules/styling-non-styled-components-within.test.js
 import { RuleTester } from "eslint";
@@ -142,17 +138,59 @@ ruleTester.run(
 console.log("All tests passed!");
 
 ```
-9) Move to AST Explorer - https://astexplorer.net/
-10) Add test cases to AST explorer
+8) Move to AST Explorer - https://astexplorer.net/
+9)  Add test cases to AST explorer
 
 ```js
 
 // good
+const StyledButton = styled.button`
+    background-color: green;
+`;
+
+const StyledForm = styled.form`
+    display: grid;
+
+    & > ${StyledButton} {
+        align-self: end;
+    }
+`;
+
+const TodoForm = () => {
+    return (
+        <StyledForm>
+            Mark Todo as completed?
+            <StyledButton>Yes!</StyledButton>
+        </StyledForm>
+    )
+};
 
 //bad
+const StyledButton = ({children, onClick}) => {
+    return (
+        <button onClick={onClick}>{children}</button>
+    )
+};
+
+const StyledForm = styled.form`
+    display: grid;
+
+    & > ${StyledButton} {
+        align-self: end;
+    }
+`;
+
+const TodoForm = () => {
+    return (
+        <StyledForm>
+            Mark Todo as completed?
+            <StyledButton>Yes!</StyledButton>
+        </StyledForm>
+    )
+};
 ```
 
-11) Write the rule (https://eslint.org/docs/latest/extend/custom-rule-tutorial)
+10) Write the rule (https://eslint.org/docs/latest/extend/custom-rule-tutorial)
 
 ```js
 // rules/styling-non-styled-components-within.js
@@ -202,8 +240,8 @@ export default {
 };
 ```
 
-12) Move it back to the local plugin
-13) Run the Tests Locally (configure the RuleTester) - `node styling-non-styled-components-within.test.js`
+11) Move it back to the local plugin
+12) Run the Tests Locally (configure the RuleTester) - `node styling-non-styled-components-within.test.js`
 
 ```js
 // rules/styling-non-styled-components-within.test.js
@@ -217,7 +255,7 @@ const ruleTester = new RuleTester({
 });
 ```
 
-14) Configure the local plugin
+13) Configure the local plugin
 
 ```js
 // rules/index.js
@@ -232,7 +270,7 @@ export default {
   processors: {}, // an object containing named processors
 };
 ```
-15) Update the config
+14) Update the config
     
 ```js
 // eslint.config.js
@@ -263,9 +301,9 @@ export default [
   },
 ];
 ```
-16) Run eslint to show the warning `npx eslint **/*.{js,jsx}`
-17) Show the CODEOWNERS File
-18) Write the report generator
+15) Run eslint to show the warning `npx eslint **/*.{js,jsx}`
+16) Show the CODEOWNERS File
+17) Write the report generator
 ```js
 // bin/report-generator.cjs
 
@@ -332,12 +370,6 @@ function getCodeOwnersMap() {
 
 process.stdout.write("Running report-generator \n");
 
-const addStdOutColor = (output, color) => {
-  if (color === "green") return `\x1b[32m${output}\x1b[37m`;
-  if (color === "yellow") return `\x1b[33m${output}\x1b[37m`;
-  return `\x1b[31m${output}\x1b[37m`;
-};
-
 const codeOwnersMap = getCodeOwnersMap();
 
 processStdInLineByLine().then((fileErrors) => {
@@ -361,13 +393,10 @@ processStdInLineByLine().then((fileErrors) => {
     }
   });
 
-  process.stdout.write(`\n \nErrors by team:\n`);
+  process.stdout.write(`\nErrors by team:\n`);
   Object.entries(errorsByTeam).forEach(([key, value]) => {
     process.stdout.write(
-      `${key}: ${addStdOutColor(
-        value,
-        value > 10 ? "red" : value > 5 ? "yellow" : "green"
-      )} \n`
+      `${key}: ${value}\n`
     );
   });
 
@@ -442,9 +471,7 @@ processStdInLineByLine().then((fileErrors) => {
 
   fs.writeFile("report.html", htmlContent, (err) => {
     if (err) {
-      process.stderr.write(
-        addStdOutColor("there was an error writing file", "red")
-      );
+      process.stderr.write("\x1b[31m there was an error writing file \x1b[37m");
     } else {
       process.stdout.write(`\x1b[32mReport was successfully generated\n`);
       exec("open report.html");
@@ -453,7 +480,7 @@ processStdInLineByLine().then((fileErrors) => {
 });
 
 ```
-13)  ignore the report.html in .gitignore
+18)  ignore the report.html in .gitignore
 
 
 What do we get?

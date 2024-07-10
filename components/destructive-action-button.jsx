@@ -39,4 +39,8 @@ export const DestructiveActionButton = styled(
     left: 50%;
     transform: translate(-50%, 50%);
   }
+
+  & > button {
+    width: 100%;
+  }
 `;
