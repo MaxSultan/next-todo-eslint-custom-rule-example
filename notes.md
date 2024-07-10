@@ -146,8 +146,10 @@ export default {
     },
     schema: [],
   },
-  create(context) {
+    create(context) {
     const identifiersToCheck = [];
+    const findIdentifierByName = (name) =>
+      identifiersToCheck.find((i) => i.name === name);
     return {
       "TaggedTemplateExpression[tag.object.name='styled'] TemplateLiteral Identifier":
         function (node) {
@@ -159,22 +161,20 @@ export default {
         },
       "Program:exit": function (node) {
         node.body.forEach((node) => {
-          node?.declarations?.forEach((declaration) => {
+          if (node.type !== "VariableDeclaration") return;
+          node.declarations.forEach((declaration) => {
             if (
-              declaration.id &&
               !identifiersToCheck
-                .map((identifier) => identifier.name)
+                .map((id) => id.name)
                 .includes(declaration.id.name)
             )
               return;
-            if (declaration.init.type === "TaggedTemplateExpression") return;
-            context.report({
-              node: identifiersToCheck.find(
-                (i) => i.name === declaration.id.name
-              ),
-              message:
-                "Don't attempt to style identifiers that are not styled components using interpolation",
-            });
+            if (declaration.init.type !== "TaggedTemplateExpression") {
+              context.report({
+                node: findIdentifierByName(declaration.id.name),
+                messageId: "wrong",
+              });
+            }
           });
         });
       },
