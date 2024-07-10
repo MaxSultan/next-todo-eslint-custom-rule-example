@@ -10,13 +10,18 @@ const TodoList = styled.ul`
   list-style: none;
 `;
 
-const CancelButton = ({ onCancel, children }) => {
-  return (
-    <button type="button" onClick={onCancel}>
-      {children}
-    </button>
-  );
-};
+// const CancelButton = styled(({ onCancel, children, className }) => (
+//     <button type="button" onClick={onCancel} className={className}>
+//       {children}
+//     </button>
+//   );
+// )``;
+
+const CancelButton = ({ onCancel, children }) => (
+  <button type="button" onClick={onCancel}>
+    {children}
+  </button>
+);
 
 const FormCard = styled.form`
   display: grid;

@@ -4,6 +4,9 @@ Show the start:
 - pages/index.jsx lines 13-26
 - components/descructive-action-button.jsx line 4,36
 - CODEOWNERS
+
+What is styled components?
+How does it work in 30 seconds
  
 Explain the styling non styled components rule
 
