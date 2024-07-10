@@ -7,7 +7,7 @@ Show the start:
 - components/descructive-action-button.jsx
 - CODEOWNERS
 
-1) run `npm init @eslint/config@9.5.0`
+1) run `npm init @eslint/config@latest`
 2) answer questions in the CLI
 3) Show the Config and explain options
 
@@ -25,29 +25,39 @@ export default [
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   pluginJs.configs.recommended,
   ...fixupConfigRules(pluginReactConfig),
-  {
-    plugins: {
-      local,
-    },
-    rules: {
-      "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
-      "local/styling-non-styled-components-within": "warn",
-    },
-  },
+];
+```
+4) Add ignores to config
+
+```js
+// eslint.config.js
   {
     ignores: [".next/", "node_modules/"],
   },
-];
 ```
 
-4) Run the linter
+5) Run the linter
 
 ```bash
 npx eslint **/*.{js,jsx}
 ```
+6) Turn off the react rule errors
 
-5) TDD - Write tests
+```js
+// eslint.config.js
+{
+    rules: {
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+    },
+  },
+```
+   
+7) Explain the styling non styled components rule
+   
+  
+
+8) TDD - Write tests
 ```js
 // rules/styling-non-styled-components-within.test.js
 import { RuleTester } from "eslint";
@@ -132,8 +142,17 @@ ruleTester.run(
 console.log("All tests passed!");
 
 ```
-6) Move to AST Parser- https://astexplorer.net/
-7) Write the rule (https://eslint.org/docs/latest/extend/custom-rule-tutorial)
+9) Move to AST Explorer - https://astexplorer.net/
+10) Add test cases to AST explorer
+
+```js
+
+// good
+
+//bad
+```
+
+11) Write the rule (https://eslint.org/docs/latest/extend/custom-rule-tutorial)
 
 ```js
 // rules/styling-non-styled-components-within.js
@@ -183,8 +202,8 @@ export default {
 };
 ```
 
-8) Move it back to the local plugin
-9)  Run the Tests Locally (configure the RuleTester) - `node styling-non-styled-components-within.test.js`
+12) Move it back to the local plugin
+13) Run the Tests Locally (configure the RuleTester) - `node styling-non-styled-components-within.test.js`
 
 ```js
 // rules/styling-non-styled-components-within.test.js
@@ -198,7 +217,7 @@ const ruleTester = new RuleTester({
 });
 ```
 
-10) Configure the local plugin
+14) Configure the local plugin
 
 ```js
 // rules/index.js
@@ -212,12 +231,41 @@ export default {
   }, // an object containing the definitions of custom rules
   processors: {}, // an object containing named processors
 };
-
-
 ```
+15) Update the config
+    
+```js
+// eslint.config.js
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
+import { fixupConfigRules } from "@eslint/compat";
+import local from "./rules/index.js";
 
-11)  Show the CODEOWNERS File
-12)  Write the report generator
+export default [
+  { files: ["**/*.{js,mjs,cjs,jsx}"] },
+  { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } } },
+  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
+  pluginJs.configs.recommended,
+  ...fixupConfigRules(pluginReactConfig),
+  {
+    plugins: {
+      local,
+    },
+    rules: {
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "local/styling-non-styled-components-within": "warn",
+    },
+  },
+  {
+    ignores: [".next/", "node_modules/"],
+  },
+];
+```
+16) Run eslint to show the warning `npx eslint **/*.{js,jsx}`
+17) Show the CODEOWNERS File
+18) Write the report generator
 ```js
 // bin/report-generator.cjs
 
