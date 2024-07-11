@@ -4,7 +4,7 @@ export default {
     fixable: false,
     name: "Dont attempt to style components that are not styled components using interpolation",
     messages: {
-      bad: "you cant do this",
+      bad: "applying styles to components that are not styled components in a template literal has no effect",
     },
   },
   create: function (context) {
