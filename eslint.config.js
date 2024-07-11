@@ -2,6 +2,7 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 import { fixupConfigRules } from "@eslint/compat";
+import local from "./rules/index.js";
 
 export default [
   { files: ["**/*.{js,mjs,cjs,jsx}"] },
@@ -16,6 +17,14 @@ export default [
     rules: {
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
+    },
+  },
+  {
+    plugins: {
+      local,
+    },
+    rules: {
+      "local/no-styling-unstyled-components": "warn",
     },
   },
 ];

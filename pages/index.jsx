@@ -11,11 +11,10 @@ const TodoList = styled.ul`
 `;
 
 // const CancelButton = styled(({ onCancel, children, className }) => (
-//     <button type="button" onClick={onCancel} className={className}>
-//       {children}
-//     </button>
-//   );
-// )``;
+//   <button type="button" onClick={onCancel} className={className}>
+//     {children}
+//   </button>
+// ))``;
 
 const CancelButton = ({ onCancel, children }) => (
   <button type="button" onClick={onCancel}>
