@@ -8,17 +8,19 @@ export default {
     },
   },
   create: function (context) {
-    const identifiersToCheck = [];
+    const identifiersInStyledTemplateLiterals = [];
+    const findIdentifier = (name) =>
+      identifiersInStyledTemplateLiterals.find((i) => i.name === name);
     return {
       "TaggedTemplateExpression TemplateLiteral Identifier": function (node) {
-        if (node.name) identifiersToCheck.push(node);
+        if (node.name) identifiersInStyledTemplateLiterals.push(node);
       },
       "Program:exit": function (node) {
         node.body.forEach((node) => {
           if (node.type !== "VariableDeclaration") return;
           node.declarations.forEach((declaration) => {
             if (
-              !identifiersToCheck
+              !identifiersInStyledTemplateLiterals
                 .map((id) => id.name)
                 .includes(declaration.id.name)
             )
@@ -26,9 +28,7 @@ export default {
             if (declaration.init.type !== "TaggedTemplateExpression") {
               context.report({
                 messageId: "bad",
-                node: identifiersToCheck.find(
-                  (i) => i.name === declaration.id.name
-                ),
+                node: findIdentifier(declaration.id.name),
               });
             }
           });
