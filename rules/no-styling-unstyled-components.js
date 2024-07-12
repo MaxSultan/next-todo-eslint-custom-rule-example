@@ -12,9 +12,14 @@ export default {
     const findIdentifier = (name) =>
       identifiersInStyledTemplateLiterals.find((i) => i.name === name);
     return {
-      "TaggedTemplateExpression TemplateLiteral Identifier": function (node) {
-        if (node.name) identifiersInStyledTemplateLiterals.push(node);
-      },
+      "TaggedTemplateExpression[tag.object.name='styled'] TemplateLiteral Identifier":
+        function (node) {
+          if (node.name) identifiersInStyledTemplateLiterals.push(node);
+        },
+      "TaggedTemplateExpression[tag.callee.name='styled'] TemplateLiteral Identifier":
+        function (node) {
+          if (node.name) identifiersInStyledTemplateLiterals.push(node);
+        },
       "Program:exit": function (node) {
         node.body.forEach((node) => {
           if (node.type !== "VariableDeclaration") return;

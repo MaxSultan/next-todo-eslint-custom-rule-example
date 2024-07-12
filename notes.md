@@ -11,7 +11,7 @@ How does it work in 30 seconds
  
 Explain the styling non styled components rule
 
-show the custom rule
+show the custom rule - explain how it works in ast-explorer
 
 show how we configured it
 
